@@ -1,0 +1,17 @@
+# Virtual environment
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment variables
+.env
+
+# Database files (optional if using SQLite)
+db.sqlite3
+
+# Cloudinary cache (if applicable)
+cloudinary_storage/
