@@ -50,6 +50,7 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 INSTALLED_APPS = [
     'books.apps.BooksConfig',
+    'blog.apps.BlogConfig',
     'corsheaders',
     'rest_framework',
     'django.contrib.admin',
