@@ -5,6 +5,7 @@ class Book(models.Model):
     book_name = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    image = models.ImageField(upload_to='temp/', null=True, blank=True)  # Temporary local storage
     image_url = models.URLField(null=True)
     release_date = models.DateField("date released")
     pub_date = models.DateField("date published")

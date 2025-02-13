@@ -15,3 +15,6 @@ db.sqlite3
 
 # Cloudinary cache (if applicable)
 cloudinary_storage/
+
+# scripts
+scripts/
