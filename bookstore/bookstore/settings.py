@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-myu%5aws*_-ap3m)$=@bfhm*4)kpzhb2tj+9l369$51%5t(b&_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1']
+ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'https://archsaintnexus-bookstore-backend.onrender.com']
 
 # Cloudinary
 CLOUDINARY_STORAGE = {
