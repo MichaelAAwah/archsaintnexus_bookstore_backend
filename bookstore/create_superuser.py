@@ -1,4 +1,10 @@
 import os
+import django
+
+# Ensure Django settings are loaded
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bookstore.settings")
+django.setup()
+
 from django.contrib.auth import get_user_model
 
 def create_superuser():
