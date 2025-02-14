@@ -7,11 +7,11 @@ class BlogAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'updated_at', 'pub_date', 'image_preview')
     list_filter = ('author', 'updated_at', 'pub_date')
     search_fields = ('title', 'author')
-    readonly_fields = ('image_preview', 'image_url')  # Prevent manual input for image_url
+    readonly_fields = ('image_preview', 'image_url', 'pub_date')  # Prevent manual input for image_url
 
     fieldsets = (
         ('Blog Details', {
-            'fields': ('title', 'author', 'updated_at', 'pub_date')
+            'fields': ('title', 'author', 'content')
         }),
         ('Blog Cover', {
             'fields': ('image', 'image_preview')
