@@ -72,13 +72,82 @@ class BlogCreateView(generics.CreateAPIView):
 
 # Update a blog
 class BlogUpdateView(generics.UpdateAPIView):
-    queryset = Blog.objects.all()
-    serializer_class = BlogSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # queryset = Blog.objects.all()
+    # serializer_class = BlogSerializer
+    # permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def put(self, request, *args, **kwargs):
+        blog_id = kwargs.get("pk")
+        blog = Blog.objects.get(id=blog_id)
+
+        serializer = BlogSerializer(data=request.data)
+        if serializer.is_valid():
+            title = serializer.validated_data['title']
+            author = serializer.validated_data['author']
+            content = serializer.validated_data['content']
+            image = serializer.validated_data['image']
+
+            # Upload to Cloudinary
+            upload_result = cloudinary.uploader.upload(image)
+
+            if 'secure_url' in upload_result:
+                image_url = upload_result['secure_url']
+                
+                for field, value in serializer.validated_data.items():
+                    if field == "image":
+                        blog.image_url = image_url
+                    else:
+                        setattr(blog, field, value) 
+
+                blog.save()
+
+                return Response({
+                    'message': 'Blog updated successfully', 
+                    'data': { 
+                        'title': title, 
+                        'author': author, 
+                        'content': content, 
+                        'image_url': image_url, 
+                        'pub_date': blog.pub_date.strftime('"%d/%m/%Y, %H:%M:%S"'), 
+                        'updated_at': blog.updated_at.strftime('"%d/%m/%Y, %H:%M:%S"'), 
+                    }
+                }, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, *args, **kwargs):
+        blog_id = kwargs.get("pk")
+        blog = Blog.objects.get(id=blog_id)
+
+        serializer = BlogSerializer(blog, data=request.data, partial=True)
+        if serializer.is_valid():
+           
+            for field, value in serializer.validated_data.items():
+                if field == "image":
+                    upload_result = cloudinary.uploader.upload(value)
+                    blog.image_url = upload_result.get("secure_url", blog.image_url)
+                else:
+                    setattr(blog, field, value) 
+
+            blog.save()
+
+            return Response({
+                "message": "Blog updated successfully",
+                'data': { 
+                    'title': blog.title, 
+                    'author': blog.author, 
+                    'content': blog.content, 
+                    'image_url': blog.image_url, 
+                    'pub_date': blog.pub_date.strftime('"%d/%m/%Y, %H:%M:%S"'), 
+                    'updated_at': blog.updated_at.strftime('"%d/%m/%Y, %H:%M:%S"'), 
+                }
+            }, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Delete a blog
 class BlogDeleteView(generics.DestroyAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
